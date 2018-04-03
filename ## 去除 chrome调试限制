@@ -1,0 +1,12 @@
+## 去除 chrome调试限制
+for (var i = 1; i < 99999; i++)
+        window.clearInterval(i);
+
+
+#调试 cookies
+run break on access.js
+var bp = breakOn(document, 'cookie');
+// found it!
+bp.disable();
+// something else is up....
+bp.enable();

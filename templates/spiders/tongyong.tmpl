@@ -1,0 +1,70 @@
+# -*- coding: utf-8 -*-
+# from scrapy_redis.spiders import RedisSpider
+from ${ProjectName}.items import ${ProjectName}Item
+from scrapy import Request, Spider
+from scrapy.loader import ItemLoader
+from scrapy.loader.processors import TakeFirst, MapCompose, Join, SelectJmes
+
+class $classname(Spider):
+    name = '$name'
+    def __init__(self, rule):
+        self.rule = rule
+        self.name = rule.name
+        self.allowed_domains = rule.allow_domains.split(",")
+        self.start_urls = rule.start_urls.split(",")
+        rule_list = []
+        # 添加`下一页`的规则
+        if rule.next_page:
+            rule_list.append(Rule(LinkExtractor(restrict_xpaths=rule.next_page)))
+        # 添加抽取文章链接的规则
+        rule_list.append(Rule(LinkExtractor(
+            allow=[rule.allow_url],
+            restrict_xpaths=[rule.extract_from]),
+            callback='parse_item'))
+        self.rules = tuple(rule_list)
+        super($classname, self).__init__()
+
+    def parse(self, response):
+        from scrapy.shell import inspect_response
+        inspect_response(response, self)
+#        url=
+#        yield Request(url,callback=self.parse_item)
+    def parse_item(self,response):
+        from scrapy.shell import inspect_response
+        inspect_response(response, self)
+        select_ul=response.css(css)
+        if select_ul:
+            for select_item in select_ul:
+                loader = ItemLoader(item=${ProjectName}Item(), selector=select_item)
+                loader.add_css(name, css)
+                loader.add_xpath(name, xpath)
+                value=None
+                loader.add_value(name, value)
+                next_loader = loader.nested_css(next_css)
+                next_loader.add_xpath(name, xpath)
+                next_loader.add_css(name, css)
+                value=None
+                next_loader.add_value(name, value,TakeFirst(), unicode.title, re='*')
+                yield loader.load_item()
+        else:
+            self.logger.info('没有对应selector,parse_item on %s ', response.url)
+#        url=
+#        yield Request(url,callback=self.parse_detail)
+    def parse_detail(self,response):
+        from scrapy.shell import inspect_response
+        inspect_response(response, self)
+        select_item=response.css(css)
+        if select_item:
+                loader = ItemLoader(item=${ProjectName}Item(), selector=select_item)
+                loader.add_css(name, css)
+                loader.add_xpath(name, xpath)
+                value=None
+                loader.add_value(name, value)
+                next_loader = loader.nested_css(next_css)
+                next_loader.add_xpath(name, xpath)
+                next_loader.add_css(name, css)
+                value=None
+                next_loader.add_value(name, value)
+                yield loader.load_item()
+        else:
+            self.logger.info('没有对应selector,parse_detail on %s ', response.url)
